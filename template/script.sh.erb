@@ -22,7 +22,7 @@ echo "$(date): Running on compute node ${compute_node}:$port"
 
 
 #Probably not needed but leaving as it is for the moment as per upstream record. 
-CPP_FILE=${WORKING_DIR}/.vscode/c_cpp_properties.json"
+CPP_FILE="${WORKING_DIR}/.vscode/c_cpp_properties.json"
 
 if [[ -f "$CPP_FILE" ]]; then
     CPP_DIR="${TMPDIR:=/tmp/$USER}/cpp-vscode"
@@ -49,5 +49,5 @@ code-server \
     --auth="password" \
     --bind-addr="0.0.0.0:${port}" \
     --disable-telemetry \
-    --user-data-dir="$CODE_SERVER_DATAROOT" \
+    --user-data-dir="${CODE_SERVER_DATAROOT}" \
     --log debug 
