@@ -22,7 +22,7 @@ echo "$(date): Running on compute node ${compute_node}:$port"
 
 
 
-CPP_FILE="<%= working_dir.to_s %>/.vscode/c_cpp_properties.json"
+CPP_FILE=${WORKING_DIR}/.vscode/c_cpp_properties.json"
 
 if [[ -f "$CPP_FILE" ]]; then
     CPP_DIR="${TMPDIR:=/tmp/$USER}/cpp-vscode"
