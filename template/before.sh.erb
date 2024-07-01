@@ -7,10 +7,12 @@ exec &> >(tee -a "pod.log")
 
 source /bin/find_host_port
 source /bin/save_passwd_as_secret
-export password="$PASSWORD"
 export host="$HOST_CFG"
 export port="$PORT_CFG"
 
+#Following directive came from the rstudio-app which we think will cause a conflict with the environment variable
+#define in script.sh.erb
+#export password="$PASSWORD"
 
 echo "host is: ${host}"
 echo "port is: ${port}"
