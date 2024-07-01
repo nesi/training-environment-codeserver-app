@@ -47,7 +47,7 @@ echo ""
 
 code-server \
     --auth="password" \
-    --bind-addr="${host}:8443" \
+    --bind-addr="0.0.0.0:8443" \
     --disable-telemetry \
     --user-data-dir="${CODE_SERVER_DATAROOT}" \
     --log debug 
