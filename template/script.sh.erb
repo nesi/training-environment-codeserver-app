@@ -15,7 +15,7 @@ CODE_SERVER_DATAROOT="$HOME/.local/share/code-server"
 mkdir -p "$CODE_SERVER_DATAROOT/extensions"
 
 # Expose the password to the server.
-#export PASSWORD="$password"
+export PASSWORD="$password"
 
 # Print compute node.
 echo "$(date): Running on compute node ${host}:$port"
@@ -46,6 +46,7 @@ echo "$(date): Started code-server"
 echo ""
 
 # avoind using ${host} for --bind-addr
+
 code-server \
     --auth="password" \
     --bind-addr="0.0.0.0:8443" \
