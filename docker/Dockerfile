@@ -44,5 +44,7 @@ RUN \
 # add local files
 COPY /root /
 
+RUN ln -s /app/code-server/bin/code-server /usr/local/bin/code-server
+
 # ports and volumes
 EXPOSE 8443
