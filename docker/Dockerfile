@@ -5,7 +5,7 @@ ARG BUILD_DATE
 ARG VERSION
 ARG CODE_RELEASE
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="aptalca"
+LABEL maintainer="Dinindu Senanayake"
 
 # environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
@@ -15,12 +15,25 @@ RUN \
   echo "**** install runtime dependencies ****" && \
   apt-get update && \
   apt-get install -y \
+    curl \
+    dnsutils \
     git \
     jq \
+    ldap-utils \
+    libnss-ldapd \
+    libpam-ldapd \
     libatomic1 \
     nano \
     net-tools \
     netcat \
+    nodejs \
+    nscd \
+    nslcd \
+    rsync \
+    unzip \
+    vim \
+    wget \
+    zip \
     sudo && \
   echo "**** install code-server ****" && \
   if [ -z ${CODE_RELEASE+x} ]; then \
@@ -39,12 +52,33 @@ RUN \
     /config/* \
     /tmp/* \
     /var/lib/apt/lists/* \
-    /var/tmp/*
+    /var/tmp/* 
+
+# install kubectl, required for running on the k8s cluster
+ARG KUBECTL_VERSION=v1.28.5
+RUN curl -LO https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl \
+    && mv kubectl /usr/local/bin/kubectl \
+    && chmod +x /usr/local/bin/kubectl
+
+# copy in ood k8s utils
+ARG UTILS_HASH=6298fb01f7a7c66a8454e3f0fd74437a32491423
+RUN git clone https://github.com/nesi/training-environment-k8s-utils.git /opt/ood-k8s-utils \
+    && cd /opt/ood-k8s-utils \
+    && git checkout $UTILS_HASH \
+    && chmod +x /opt/ood-k8s-utils/files/* \
+    && mv /opt/ood-k8s-utils/files/* /bin/ \
+    && rm -rf /opt/ood-k8s-utils
+
+# make a dummy module command to avoid warnings from ondemand job_script_content.sh
+RUN echo "#!/bin/bash" > /bin/module \
+    && chmod +x /bin/module
+
 
 # add local files
 COPY /root /
 
 RUN ln -s /app/code-server/bin/code-server /usr/local/bin/code-server
+
 
 # ports and volumes
 EXPOSE 8443
