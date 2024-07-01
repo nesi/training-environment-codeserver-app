@@ -45,6 +45,7 @@ if [[ -f "$CPP_FILE" ]]; then
 echo "$(date): Started code-server"
 echo ""
 
+# avoind using ${host} for --bind-addr
 code-server \
     --auth="password" \
     --bind-addr="0.0.0.0:8443" \
