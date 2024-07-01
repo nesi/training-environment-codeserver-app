@@ -18,7 +18,7 @@ mkdir -p "$CODE_SERVER_DATAROOT/extensions"
 export PASSWORD="$password"
 
 # Print compute node.
-echo "$(date): Running on compute node ${compute_node}:$port"
+echo "$(date): Running on compute node ${host}:$port"
 
 
 #Probably not needed but leaving as it is for the moment as per upstream record. 
@@ -47,7 +47,7 @@ echo ""
 
 code-server \
     --auth="password" \
-    --bind-addr="0.0.0.0:8443" \
+    --bind-addr="${host}:8443" \
     --disable-telemetry \
     --user-data-dir="${CODE_SERVER_DATAROOT}" \
     --log debug 
