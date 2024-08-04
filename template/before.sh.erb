@@ -5,11 +5,11 @@ exec &> >(tee -a "pod.log")
 # Export the module function if it exists
 [[ $(type -t module) == "function" ]] && export -f module
 
-source /bin/find_host_port
-source /bin/save_passwd_as_secret
-export host="$HOST_CFG"
-export port="$PORT_CFG"
+# Find available port to run server on
+export port=$(find_port ${host})
 
+# Export compute node the script is running on
+export host="${host}"
 
 echo "host is: ${host}"
 echo "port is: ${port}"
@@ -17,6 +17,4 @@ echo "port is: ${port}"
 # Generate SHA1 encrypted password (requires OpenSSL installed)
 #commenting this out to check whether this is the cause of the $PASSWORD variable not getting invoked correctly
 export password="$(create_passwd 16)"
-PASSWORD="$password"
-export password PASSWORD
 

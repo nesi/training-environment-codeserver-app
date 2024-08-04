@@ -14,6 +14,8 @@ fi
 CODE_SERVER_DATAROOT="$HOME/.local/share/code-server"
 mkdir -p "$CODE_SERVER_DATAROOT/extensions"
 
+# Expose the password to the server.
+export PASSWORD="$password"
 
 # Print compute node.
 echo "$(date): Running on compute node ${host}:$port"
