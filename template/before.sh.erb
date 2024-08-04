@@ -17,3 +17,6 @@ echo "port is: ${port}"
 # Generate SHA1 encrypted password (requires OpenSSL installed)
 #commenting this out to check whether this is the cause of the $PASSWORD variable not getting invoked correctly
 export password="$(create_passwd 16)"
+PASSWORD="$password"
+export password PASSWORD
+
