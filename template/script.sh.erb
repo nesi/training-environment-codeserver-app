@@ -1,27 +1,26 @@
-#!/usr/bin/bash -l
-<%
+#!/usr/bin/env bash
 
 # Set our working directory.
-working_dir = Pathname.new(context.working_dir)
+export WORKING_DIR="<%= session.staged_root %>"
+
 
 # Ensure that code-server always starts up in either a user defined directory or the home directory.
-if ! working_dir.exist?
-    working_dir = Pathname.new(ENV['HOME'])
-elsif working_dir.file?
-    working_dir = working_dir.parent
-end
-%>
+if [ ! -e "${WORKING_DIR}" ]; then
+    ${WORKING_DIR}="$HOME"
+elif [ -f "${WORKING_DIR}" ]; then
+    ${WORKING_DIR}="$(dirname "${WORKING_DIR}")"
+fi
 
 CODE_SERVER_DATAROOT="$HOME/.local/share/code-server"
 mkdir -p "$CODE_SERVER_DATAROOT/extensions"
 
-# Expose the password to the server.
-export PASSWORD="$password"
 
 # Print compute node.
-echo "$(date): Running on compute node ${compute_node}:$port"
+echo "$(date): Running on compute node ${host}:$port"
 
-CPP_FILE="<%= working_dir.to_s %>/.vscode/c_cpp_properties.json"
+
+#Probably not needed but leaving as it is for the moment as per upstream record. 
+CPP_FILE="${WORKING_DIR}/.vscode/c_cpp_properties.json"
 
 if [[ -f "$CPP_FILE" ]]; then
     CPP_DIR="${TMPDIR:=/tmp/$USER}/cpp-vscode"
@@ -44,11 +43,12 @@ if [[ -f "$CPP_FILE" ]]; then
 echo "$(date): Started code-server"
 echo ""
 
-/usr/bin/code-server \
+# avoind using ${host} for --bind-addr
+
+code-server \
     --auth="password" \
-    --bind-addr="0.0.0.0:${port}" \
+    --bind-addr="0.0.0.0:8443" \
     --disable-telemetry \
-    --ignore-last-opened \
-    --user-data-dir="$CODE_SERVER_DATAROOT" \
-    --log debug \
-    "<%= working_dir.to_s %>"
+    --user-data-dir="${CODE_SERVER_DATAROOT}" \
+    --extensions-dir="$CODE_SERVER_DATAROOT/extensions" \
+    --log debug 
